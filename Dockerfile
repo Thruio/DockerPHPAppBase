@@ -5,7 +5,9 @@ CMD ["/sbin/my_init"]
 
 # Install base packages
 ENV DEBIAN_FRONTEND noninteractive
-RUN wget -O - https://download.newrelic.com/548C16BF.gpg | apt-key add - && \
+RUN apt-get update && \
+    apt-get -yq install wget && \
+    wget -O - https://download.newrelic.com/548C16BF.gpg | apt-key add - && \
     sh -c 'echo "deb http://apt.newrelic.com/debian/ newrelic non-free" > /etc/apt/sources.list.d/newrelic.list' && \
     apt-get update && \
     apt-get -yq install \
