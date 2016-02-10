@@ -1,0 +1,50 @@
+FROM phusion/baseimage:latest
+MAINTAINER Matthew Baggett <matthew@baggett.me>
+
+CMD ["/sbin/my_init"]
+
+# Install base packages
+ENV DEBIAN_FRONTEND noninteractive
+RUN apt-get update && \
+    apt-get -yq install \
+        nano \
+        aptitude \
+        git \
+        curl \
+        apache2 \
+        libapache2-mod-php5 \
+        php5-mysql \
+        php5-curl \
+        php5-apcu \
+        php5-gd \
+	php5-intl \
+	php5-cli \
+        mysql-client && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+RUN sed -i "s/upload_max_filesize.*/upload_max_filesize = 1024M/g" /etc/php5/apache2/php.ini && \
+    sed -i "s/post_max_size.*/post_max_size = 1024M/g" /etc/php5/apache2/php.ini && \
+    sed -i "s/max_execution_time.*/max_execution_time = 0/g" /etc/php5/apache2/php.ini && \
+    sed -i "s/variables_order.*/variables_order = \"EGPCS\"/g" /etc/php5/apache2/php.ini
+RUN cat /etc/php5/apache2/php.ini | grep mbstring.http_input
+
+# Install composer
+RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
+
+# Configure /app folder with sample app
+RUN mkdir -p /app && rm -fr /var/www/html && ln -s /app /var/www/html
+WORKDIR /app
+
+# Set up Apache
+ADD docker/ApacheConfig.conf /etc/apache2/sites-enabled/000-default.conf
+ADD docker/apache2.conf /etc/apache2/apache2.conf
+RUN a2enmod rewrite && /etc/init.d/apache2 restart
+
+# Add ports.
+EXPOSE 80
+
+# Add startup scripts
+RUN mkdir /etc/service/apache2
+ADD docker/run.apache.sh /etc/service/apache2/run
+RUN chmod +x /etc/service/*/run
