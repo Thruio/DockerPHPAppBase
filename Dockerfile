@@ -19,6 +19,8 @@ RUN apt-get update && \
         php5-gd \
 	php5-intl \
 	php5-cli \
+	php5-mcrypt \
+	php5-sqlite3 \
         mysql-client && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
