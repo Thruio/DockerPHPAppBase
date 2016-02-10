@@ -34,7 +34,6 @@ RUN sed -i "s/upload_max_filesize.*/upload_max_filesize = 1024M/g" /etc/php5/apa
     sed -i "s/post_max_size.*/post_max_size = 1024M/g" /etc/php5/apache2/php.ini && \
     sed -i "s/max_execution_time.*/max_execution_time = 0/g" /etc/php5/apache2/php.ini && \
     sed -i "s/variables_order.*/variables_order = \"EGPCS\"/g" /etc/php5/apache2/php.ini
-RUN cat /etc/php5/apache2/php.ini | grep mbstring.http_input
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
