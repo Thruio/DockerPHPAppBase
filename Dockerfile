@@ -5,7 +5,9 @@ CMD ["/sbin/my_init"]
 
 # Install base packages
 ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update && \
+RUN wget -O - https://download.newrelic.com/548C16BF.gpg | apt-key add - && \
+    sh -c 'echo "deb http://apt.newrelic.com/debian/ newrelic non-free" > /etc/apt/sources.list.d/newrelic.list' && \
+    apt-get update && \
     apt-get -yq install \
         nano \
         aptitude \
@@ -21,6 +23,7 @@ RUN apt-get update && \
 	php5-cli \
 	php5-mcrypt \
 	php5-sqlite3 \
+	newrelic-php5 \
         mysql-client && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -33,6 +36,11 @@ RUN cat /etc/php5/apache2/php.ini | grep mbstring.http_input
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
+
+# Install Newrelic
+RUN newrelic-install install
+ADD docker/newrelic.ini /etc/php5/cli/conf.d/newrelic.ini
+ADD docker/newrelic.ini /etc/php5/apache2/conf.d/newrelic.ini
 
 # Configure /app folder with sample app
 RUN mkdir -p /app && rm -fr /var/www/html && ln -s /app /var/www/html
