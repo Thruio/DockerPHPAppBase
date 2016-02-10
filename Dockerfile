@@ -49,7 +49,7 @@ WORKDIR /app
 # Set up Apache
 ADD docker/ApacheConfig.conf /etc/apache2/sites-enabled/000-default.conf
 ADD docker/apache2.conf /etc/apache2/apache2.conf
-RUN a2enmod rewrite && /etc/init.d/apache2 restart
+RUN a2enmod rewrite
 
 # Add ports.
 EXPOSE 80
