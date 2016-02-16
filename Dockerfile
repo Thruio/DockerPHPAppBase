@@ -33,7 +33,9 @@ RUN apt-get update && \
 RUN sed -i "s/upload_max_filesize.*/upload_max_filesize = 1024M/g" /etc/php5/apache2/php.ini && \
     sed -i "s/post_max_size.*/post_max_size = 1024M/g" /etc/php5/apache2/php.ini && \
     sed -i "s/max_execution_time.*/max_execution_time = 0/g" /etc/php5/apache2/php.ini && \
-    sed -i "s/variables_order.*/variables_order = \"EGPCS\"/g" /etc/php5/apache2/php.ini
+    sed -i "s/variables_order.*/variables_order = \"EGPCS\"/g" /etc/php5/apache2/php.ini && \
+    sed -i "s/error_reporting.*/error_reporting = E_ALL \& \~E_DEPRECATED \& \~E_STRICT \& \~E_CORE_WARNING/g" /etc/php5/apache2/php.ini && \
+    cp /etc/php5/apache2/php.ini /etc/php5/cli/php.ini
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
@@ -41,7 +43,6 @@ RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/lo
 # Install Newrelic
 RUN newrelic-install install
 ADD docker/newrelic.ini /etc/php5/mods-available/newrelic.ini
-RUN ls -lah /etc/php5/mods-available
 
 # Configure /app folder with sample app
 RUN mkdir -p /app && rm -fr /var/www/html && ln -s /app /var/www/html
