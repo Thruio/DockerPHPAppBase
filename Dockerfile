@@ -42,7 +42,9 @@ RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/lo
 
 # Install Newrelic
 RUN newrelic-install install
-ADD docker/newrelic.ini /etc/php5/mods-available/newrelic.ini
+RUN rm /etc/php5/mods-available/newrelic.ini
+ADD docker/newrelic.ini /etc/php5/cli/conf.d/newrelic.ini
+ADD docker/newrelic.ini /etc/php5/apache2/conf.d/newrelic.ini
 
 # Configure /app folder with sample app
 RUN mkdir -p /app && rm -fr /var/www/html && ln -s /app /var/www/html
