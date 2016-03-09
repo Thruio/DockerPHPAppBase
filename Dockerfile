@@ -10,7 +10,7 @@ RUN apt-get update && \
     wget -O - https://download.newrelic.com/548C16BF.gpg | apt-key add - && \
     sh -c 'echo "deb http://apt.newrelic.com/debian/ newrelic non-free" > /etc/apt/sources.list.d/newrelic.list' && \
     apt-get update && \
-    apt-get upgrade && \
+    apt-get -yq upgrade && \
     apt-get -yq install \
         nano \
         aptitude \
