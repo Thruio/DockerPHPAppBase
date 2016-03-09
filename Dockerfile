@@ -26,6 +26,7 @@ RUN apt-get update && \
         php5-cli \
         php5-mcrypt \
         php5-sqlite \
+        php5-pspell \
         newrelic-php5 \
         mysql-client && \
     apt-get clean && \
