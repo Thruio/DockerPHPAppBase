@@ -33,7 +33,6 @@ RUN apt-get update && \
         php7.0-sqlite \
         php7.0-opcache \
         php7.0-json \
-#        php7.0-xdebug \
         newrelic-php5 \
         mysql-client \
         ca-certificates && \
