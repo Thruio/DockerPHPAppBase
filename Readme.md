@@ -6,6 +6,7 @@ A base system (based upon Phusion/Baseimage, itself based on Ubuntu Trusty) that
 
 Features include:
 
+ * PHP7!
  * Composer
  * Newrelic app monitoring agent
  * Effortless!
