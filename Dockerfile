@@ -30,7 +30,7 @@ RUN apt-get update && \
         newrelic-php5 \
         mysql-client && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/apt/archives/*.deb
 
 RUN sed -i "s/upload_max_filesize.*/upload_max_filesize = 1024M/g" /etc/php5/apache2/php.ini && \
     sed -i "s/post_max_size.*/post_max_size = 1024M/g" /etc/php5/apache2/php.ini && \
