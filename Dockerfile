@@ -17,6 +17,7 @@ RUN apt-get update && \
         git \
         curl \
         apache2 \
+        nodejs npm ruby \
         libapache2-mod-php5 \
         php5-mysql \
         php5-curl \
@@ -30,7 +31,9 @@ RUN apt-get update && \
         newrelic-php5 \
         mysql-client && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/apt/archives/*.deb
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/apt/archives/*.deb && \
+    npm install -g grunt && \
+    gem install sass
 
 RUN sed -i "s/upload_max_filesize.*/upload_max_filesize = 1024M/g" /etc/php5/apache2/php.ini && \
     sed -i "s/post_max_size.*/post_max_size = 1024M/g" /etc/php5/apache2/php.ini && \
@@ -61,6 +64,7 @@ EXPOSE 80
 
 # Add startup scripts
 RUN mkdir /etc/service/apache2
+ADD docker/run.grunt.sh /etc/service/grunt/run
 ADD docker/run.apache.sh /etc/service/apache2/run
 RUN chmod +x /etc/service/*/run
 
