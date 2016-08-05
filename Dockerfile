@@ -14,6 +14,7 @@ RUN apt-get update && \
     add-apt-repository ppa:ondrej/php && \
     apt-get update && \
     apt-get -yq install \
+        sudo \
         nano \
         aptitude \
         unzip \
@@ -42,14 +43,15 @@ RUN apt-get update && \
 
 # Install PHP7 xdebug from source
 RUN cd /tmp && \
-    wget -O xdebug.tgz http://xdebug.org/files/xdebug-2.4.0rc3.tgz && \
+    wget -O xdebug.tgz http://xdebug.org/files/xdebug-2.4.0rc4.tgz && \
     tar -xvzf xdebug.tgz && \
-    cd xdebug-2.4.0RC3 && \
+    cd xdebug-2.4.0RC4 && \
     phpize && \
     ./configure && \
     make && \
     cp modules/xdebug.so /usr/lib/php/20151012
 
+# Configure PHP
 RUN sed -i "s/upload_max_filesize.*/upload_max_filesize = 1024M/g" /etc/php/7.0/apache2/php.ini && \
     sed -i "s/post_max_size.*/post_max_size = 1024M/g" /etc/php/7.0/apache2/php.ini && \
     sed -i "s/max_execution_time.*/max_execution_time = 0/g" /etc/php/7.0/apache2/php.ini && \
@@ -57,6 +59,16 @@ RUN sed -i "s/upload_max_filesize.*/upload_max_filesize = 1024M/g" /etc/php/7.0/
     sed -i "s/error_reporting.*/error_reporting = E_ALL \& \~E_DEPRECATED \& \~E_STRICT \& \~E_CORE_WARNING/g" /etc/php/7.0/apache2/php.ini && \
     cp /etc/php/7.0/apache2/php.ini /etc/php/7.0/cli/php.ini && \
     echo "\n\nzend_extension = /usr/lib/php/20151012/xdebug.so\n" >> /etc/php/7.0/cli/php.ini
+
+# Add NodeJS updated PPA repos & install NodeJS 6 + NPM + Gulp
+RUN curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+RUN apt-get update && \
+    apt-get -yq install \
+        nodejs && \
+    rm -rf /var/lib/apt/lists/* && \
+    apt-get clean
+
+RUN npm install -g gulp
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
