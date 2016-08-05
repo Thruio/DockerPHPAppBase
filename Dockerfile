@@ -7,11 +7,8 @@ CMD ["/sbin/my_init"]
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && \
     apt-get -yq install wget python-software-properties && \
-    rm -rf /var/lib/apt/lists/* && \
     wget -O - https://download.newrelic.com/548C16BF.gpg | apt-key add - && \
     sh -c 'echo "deb http://apt.newrelic.com/debian/ newrelic non-free" > /etc/apt/sources.list.d/newrelic.list' && \
-    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4F4EA0AAE5267A6C && \
-    add-apt-repository ppa:ondrej/php && \
     apt-get update && \
     apt-get -yq install \
         sudo \
@@ -43,9 +40,9 @@ RUN apt-get update && \
 
 # Install PHP7 xdebug from source
 RUN cd /tmp && \
-    wget -O xdebug.tgz http://xdebug.org/files/xdebug-2.4.0rc4.tgz && \
+    wget -O xdebug.tgz http://xdebug.org/files/xdebug-2.4.1.tgz && \
     tar -xvzf xdebug.tgz && \
-    cd xdebug-2.4.0RC4 && \
+    cd xdebug-2.4.1 && \
     phpize && \
     ./configure && \
     make && \
