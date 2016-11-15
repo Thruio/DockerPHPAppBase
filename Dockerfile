@@ -66,7 +66,19 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
 
-RUN npm install -g gulp grunt
+RUN npm install -g \
+        gulp \
+        grunt \
+        grunt-autoprefixer \
+        grunt-cli \
+        grunt-contrib-concat \
+        grunt-contrib-cssmin \
+        grunt-contrib-jshint \
+        grunt-contrib-less \
+        grunt-contrib-sass \
+        grunt-contrib-uglify \
+        grunt-contrib-watch \
+        grunt-sass
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
@@ -90,7 +102,7 @@ EXPOSE 80
 
 # Add startup scripts
 RUN mkdir /etc/service/apache2
-ADD docker/run.grunt.sh /etc/service/grunt/run
+#ADD docker/run.grunt.sh /etc/service/grunt/run
 ADD docker/run.apache.sh /etc/service/apache2/run
 RUN chmod +x /etc/service/*/run
 
