@@ -27,6 +27,7 @@ RUN apt-get update && \
         php7.0-gd \
         php7.0-intl \
         php7.0-cli \
+        php7.0-mbstring \
         php7.0-mcrypt \
         php7.0-sqlite \
         php7.0-opcache \
