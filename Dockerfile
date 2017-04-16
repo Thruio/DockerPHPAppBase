@@ -103,8 +103,7 @@ RUN a2enmod rewrite
 EXPOSE 80
 
 # Add startup scripts
-RUN    mkdir /etc/service/grunt \
-    && mkdir /etc/service/apache2\
+RUN    mkdir /etc/service/apache2\
     && mkdir /etc/service/show_logs \
     && mkdir /etc/service/create_log_dir
 #ADD docker/run.grunt.sh            /etc/service/grunt/run
