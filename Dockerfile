@@ -103,8 +103,13 @@ RUN a2enmod rewrite
 EXPOSE 80
 
 # Add startup scripts
-RUN mkdir /etc/service/apache2
-#ADD docker/run.grunt.sh /etc/service/grunt/run
-ADD docker/run.apache.sh /etc/service/apache2/run
+RUN    mkdir /etc/service/grunt \
+    && mkdir /etc/service/apache2\
+    && mkdir /etc/service/show_logs \
+    && mkdir /etc/service/create_log_dir
+#ADD docker/run.grunt.sh            /etc/service/grunt/run
+ADD docker/run.apache.sh            /etc/service/apache2/run
+COPY docker/run.show_logs.sh        /etc/service/show_logs/run
+COPY docker/run.create_log_dir.sh   /etc/service/create_log_dir/run
 RUN chmod +x /etc/service/*/run
 
