@@ -11,7 +11,6 @@ RUN apt-get update && \
     sh -c 'echo "deb http://apt.newrelic.com/debian/ newrelic non-free" > /etc/apt/sources.list.d/newrelic.list' && \
     apt-get update && \
     apt-get -yq install \
-        sudo \
         nano \
         aptitude \
         unzip \
@@ -20,7 +19,7 @@ RUN apt-get update && \
         apache2 \
         libapache2-mod-php7.0 \
         php7.0 \
-        php-all-dev \
+        php-xdebug \
         php7.0-mysql \
         php7.0-curl \
         php-apcu \
@@ -41,16 +40,6 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/apt/archives/*.deb
 
-# Install PHP7 xdebug from source
-RUN cd /tmp && \
-    wget -O xdebug.tgz http://xdebug.org/files/xdebug-2.4.1.tgz && \
-    tar -xvzf xdebug.tgz && \
-    cd xdebug-2.4.1 && \
-    phpize && \
-    ./configure && \
-    make && \
-    cp modules/xdebug.so /usr/lib/php/20151012
-
 # Configure PHP
 RUN sed -i "s/upload_max_filesize.*/upload_max_filesize = 1024M/g" /etc/php/7.0/apache2/php.ini && \
     sed -i "s/post_max_size.*/post_max_size = 1024M/g" /etc/php/7.0/apache2/php.ini && \
@@ -59,28 +48,6 @@ RUN sed -i "s/upload_max_filesize.*/upload_max_filesize = 1024M/g" /etc/php/7.0/
     sed -i "s/error_reporting.*/error_reporting = E_ALL \& \~E_DEPRECATED \& \~E_STRICT \& \~E_CORE_WARNING/g" /etc/php/7.0/apache2/php.ini && \
     cp /etc/php/7.0/apache2/php.ini /etc/php/7.0/cli/php.ini && \
     echo "\n\nzend_extension = /usr/lib/php/20151012/xdebug.so\n" >> /etc/php/7.0/cli/php.ini
-
-# Add NodeJS updated PPA repos & install NodeJS 6 + NPM + Gulp
-RUN curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
-RUN apt-get update && \
-    apt-get -yq install \
-        nodejs && \
-    rm -rf /var/lib/apt/lists/* && \
-    apt-get clean
-
-RUN npm install -g \
-        gulp \
-        grunt \
-        grunt-autoprefixer \
-        grunt-cli \
-        grunt-contrib-concat \
-        grunt-contrib-cssmin \
-        grunt-contrib-jshint \
-        grunt-contrib-less \
-        grunt-contrib-sass \
-        grunt-contrib-uglify \
-        grunt-contrib-watch \
-        grunt-sass
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
